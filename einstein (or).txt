@@ -1,0 +1,88 @@
+%declaration of the variables as atoms
+
+drink(water; coffee; tea; milk; bier).
+nationality(english; german; sweden; danish; norwegian).
+smoke(polmol; bluemasters; prince; dunhill; blend).
+pet(dog; cat; fish; horse; bird).
+h_index(1..5). 
+h_color(red, blue, yellow, green, white).
+
+%end of the declaration
+
+
+%generation part, generates all combinations for every drink
+1{match(N, S, SM, PT) : nationality(S), smoke(SM), pet(PT)}1 :- drink(N).
+
+
+%extraction of 2 variables in every combination
+match12(N, S) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match13(N, SM) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match14(N, PT) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match21(S, N) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match23(S, SM) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match24(S, PT) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match31(SM, N) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match32(SM, S) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match34(SM, PT) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match41(PT, N) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match42(PT, S) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+match43(PT, SM) :- match(N, S, SM, PT), drink(N), nationality(S), smoke(SM), pet(PT).
+%end of extraction
+
+
+%constraints
+
+%a drink cant be assigned to more than 1 (nationality, smoke, pet)
+:- match12(N, S), match12(A, S), drink(N;A), nationality(S), N!=A.
+:- match13(N, SM), match13(A, SM), drink(N;A), smoke(SM), N!=A.
+:- match14(N, PT), match14(A, PT), drink(N;A), pet(PT), N!=A.
+
+%same operation for nationality
+:- match21(S, N), match21(A, N), nationality(S;A), drink(N), S!=A.
+:- match23(S, SM), match23(A, SM), nationality(S;A), smoke(SM), S!=A.
+:- match24(S, PT), match24(A, PT), nationality(S;A), pet(PT), S!=A.
+
+%same for smoke
+:- match31(SM, N), match31(A, N), smoke(SM;A), drink(N), SM!=A.
+:- match32(SM, S), match32(A, S), smoke(SM;A), nationality(S), SM!=A.
+:- match34(SM, PT), match34(A, PT), smoke(SM;A), pet(PT), SM!=A.
+
+%same for pet
+:- match41(PT, N), match41(A, N), pet(PT;A), drink(N), PT!=A.
+:- match42(PT, S), match42(A, S), pet(PT;A), nationality(S), PT!=A.
+:- match43(PT, SM), match43(A, SM), pet(PT;A), smoke(SM), PT!=A.
+
+%constraints of the problem itself
+:- match(abner, engel, SM, PT).
+:- match(abner, foster, SM, PT).
+:- match(N, engel, unknown1, PT).
+:- match(N, engel, unknown2, PT).
+:- match(N, engel, waggles, PT).
+:- match(chuck, S, SM, iguana).
+:- match(duane, S, SM, iguana).
+:- match(N, foster, SM, jackal).
+:- match(N, foster, SM, cobra).
+:- match(duane, S, SM, lama).
+:- match(duane, S, unknown1, PT).
+:- match(duane, S, unknown2, PT).
+:- match(duane, S, sparky, PT).
+:- match(abner, gunter, SM, PT).
+:- match(abner, S, SM, cobra).
+:- match(bruce, foster, SM, PT).
+:- match(N, halevy, SM, iguana).
+
+
+
+
+%why this does not work?
+:- match(N, A, B, C), match(N, D, E, F), drink(N), nationality(A;D), smoke(B;E), pet(C;F),
+A!=D; B!=E; C!=F.
+
+:- match(A, S, B, C), match(D, S, E, F), nationality(S), drink(A;D), smoke(B;E), pet(C;F),
+A!=D; B!=E; C!=F.
+
+:- match(A, B, SM, C), match(D, E, SM, F), smoke(SM), drink(A;D), nationality(B;E), pet(C;F),
+A!=D; B!=E; C!=F.
+
+:- match(A, B, C, PT), match(D, E, F, PT), pet(PT), drink(A;D), nationality(B;E), smoke(C;F),
+A!=D; B!=E; C!=F.

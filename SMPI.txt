@@ -1,0 +1,41 @@
+%domain
+manrank(1,2,2). %first man chooses second woman as his third choice.
+manrank(1,1,1).
+manrank(1,3,3).
+manrank(2,1,3).
+manrank(2,2,1).
+manrank(2,3,2).
+manrank(3,1,2).
+manrank(3,2,3).
+manrank(3,3,1).
+manrank(4,1,1).
+manrank(4,2,2).
+manrank(4,3,3).
+
+
+
+womanrank(1,2,1).
+womanrank(1,1,3).
+womanrank(1,3,2).
+womanrank(2,2,3).
+womanrank(2,1,2).
+womanrank(2,3,1).
+womanrank(3,2,2).
+womanrank(3,1,1).
+womanrank(3,3,3).
+ 
+ 
+ 
+man(1..3).
+woman(1..3).
+%generate
+1{accept(M,W):woman(W)}1:-man(M).
+
+
+ 
+
+%test
+:-2{accept(M,W):man(M)},woman(W).
+:-accept(M,W'), manrank(M,W,S), manrank(M,W',S'), S>S', accept(M',W), womanrank(W,M,S), womanrank(W,M',S'), S>S'.
+:-accept(M,W),not womanrank(W,M,), not manrank(M,W,).
+#show accept/2.

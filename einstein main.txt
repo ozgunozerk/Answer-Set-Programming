@@ -1,0 +1,69 @@
+%1The Englishman lives in the red house.  
+%1The Swede keeps dogs.
+%1The Dane drinks tea.
+%1The green house is just to the left of the white one.
+%1The owner of the green house drinks coffee.
+%1The Pall Mall smoker keeps birds.
+%1The owner of the yellow house smokes Dunhills.
+%1The man in the center house drinks milk.
+%1The Norwegian lives in the first house.
+%The Blend smoker has a neighbor who keeps cats.
+%1The man who smokes Blue Masters drinks bier.
+%The man who keeps horses lives next to the Dunhill smoker.
+%1The German smokes Prince.
+%The Norwegian lives next to the blue house.
+%The Blend smoker has a neighbor who drinks water.
+
+nat(ger;eng;dan;swe;nor).
+ind(1;2;3;4;5).
+smo(ble;pal;mas;dun;pri).
+ani(hor;fis;dog;bir;cat).
+dri(wat;cof;tea;mil;bie).
+house(red;blu;whi;yel;gre).
+
+
+5{map(H,I):ind(I),house(H)}5.
+:-map(H,I),map(H1,I),H!=H1.
+:-map(H,I),map(H,I1),I!=I1.
+
+5{person(N,H):house(H),nat(N)}5.
+:-person(N,H),person(N1,H),N!=N1.
+:-person(N,H),person(N,H1),H!=H1.
+
+5{map2(N,D):nat(N),dri(D)}5.
+:-map2(N,D),map2(N,D1),D!=D1.
+:-map2(N,D),map2(N1,D),N!=N1.
+
+5{map3(N,S):smo(S),nat(N)}5.
+:-map3(N,S),map3(N,S1),S!=S1.
+:-map3(N,S),map3(N1,S),N1!=N.
+
+5{map4(N,A):ani(A),nat(N)}5.
+:-map4(N,A),map4(N1,A),N1!=N.
+:-map4(N,A1),map4(N,A),A1!=A.
+
+5{map5(N,I):ind(I),nat(N)}5.
+:-map5(N,I),map5(N1,I),N1!=N.
+:-map5(N,I1),map5(N,I),I1!=I.
+
+
+person(eng,red).
+map4(swe,dog).
+map2(dan,tea).
+map(whi,I+1):-map(gre,I).
+map2(N,cof):-person(N,gre).
+map4(N,bir):-map3(N,pal).
+map3(N,dun):-person(N,yel).
+map2(N,mil):-map5(N,3).
+map(C,1):-person(nor,C).
+map4(N1,cat):-map3(N,ble),map5(N,I),map5(N1,J),|I-J|==1.
+:-map3(N1,S),map4(N,cat),map5(N,I),nat(N),map5(N1,J),|I-J|==1,S!=ble.
+map3(N1,dun):-map4(N,hor),map5(N,I),map5(N1,J),|I-J|==1.
+map3(ger,pri).
+map(blu,2).
+map2(N1,wat):-map3(N,ble),map5(N,I),map5(N1,J),|I-J|==1.
+map2(N,bie):-map3(N,mas).
+
+#show map4/2.
+
+

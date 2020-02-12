@@ -1,0 +1,61 @@
+% file: graph_n1.lp
+% Instance Description: Graph based on Mycielski transformation.
+% p edge 11 20 (11 vertices and 20 edges)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Domain predicates
+
+% declaration of vertex atoms
+v(1..11).
+
+% declaration of edge atoms
+e(1,2).
+e(1,4).
+e(1,7).
+e(1,9).
+e(2,3).
+e(2,6).
+e(2,8).
+e(3,5).
+e(3,7).
+e(3,10).
+e(4,5).
+e(4,6).
+e(4,10).
+e(5,8).
+e(5,9).
+e(6,11).
+e(7,11).
+e(8,11).
+e(9,11).
+e(10,11).
+
+-----------------------------------------------------------------------
+
+% file: chromatic_number.lp
+% Problem Description: Finding the chromatic number of a given graph
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Domain predicates
+
+c(1..100).           
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generate
+                                         
+1 {color(X,I) : c(I)} 1 :- v(X). 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Test
+
+:- color(X,I), color(Y,I), e(X,Y), c(I). 
+:~color(X,I). [I@1,X]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Display
+
+#show color/2.
